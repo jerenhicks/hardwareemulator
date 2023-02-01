@@ -8,7 +8,6 @@ using Newtonsoft.Json;
 class ServerCreation
 {
     private readonly string serverFileLocation = @".\serverlist.json";
-    private readonly System.Threading.EventWaitHandle waitHandle = new System.Threading.AutoResetEvent(false);
 
     public void StartUp()
     {
