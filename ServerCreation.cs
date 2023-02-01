@@ -3,6 +3,11 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
 using Newtonsoft.Json;
+using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 
 class ServerCreation
@@ -45,54 +50,27 @@ class ServerCreation
 
     private bool StartServer(Server server)
     {
+        TcpListener tcpserver = new TcpListener(server.port);
+        tcpserver.Start();
+        Console.WriteLine("Starting server ({0}), waiting for a connection...", server.id);
+        TcpClient client = tcpserver.AcceptTcpClient();
+        Console.WriteLine("Connection found");
+        NetworkStream strm = client.GetStream();
 
-        IPHostEntry host = Dns.GetHostEntry("localhost");
-        IPAddress ipAddress = host.AddressList[0];
-        IPEndPoint localEndPoint = new IPEndPoint(ipAddress, server.port);
+        //TODO: we need to loop here for messages. 
+        Console.WriteLine("message found");
+        IFormatter formatter = new BinaryFormatter();
 
-        try
-        {
+        //Person p = (Person)formatter.Deserialize(strm); // you have to cast the deserialized object 
 
-            // Create a Socket that will use Tcp protocol      
-            Socket listener = new Socket(ipAddress.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            // A Socket must be associated with an endpoint using the Bind method  
-            listener.Bind(localEndPoint);
-            // Specify how many requests a Socket can listen before it gives Server busy response.  
-            // We will listen 10 requests at a time  
-            listener.Listen(1);
+        //Console.WriteLine("Hi, I'm " + p.FirstName + " " + p.LastName + " and I'm " + p.age + " years old!");
+        Console.WriteLine("Message received");
 
-            string logMessage = String.Format("Starting server ({0}), waiting for a connection...", server.id);
-            Console.WriteLine(logMessage);
-            Socket handler = listener.Accept();
-            Console.WriteLine("Are we waiting?");
 
-            // Incoming data from the client.    
-            string data = null;
-            byte[] bytes = null;
 
-            while (true)
-            {
-                bytes = new byte[1024];
-                int bytesRec = handler.Receive(bytes);
-                data += Encoding.ASCII.GetString(bytes, 0, bytesRec);
-                if (data.IndexOf("<EOF>") > -1)
-                {
-                    break;
-                }
-            }
-
-            Console.WriteLine("Text received : {0}", data);
-
-            byte[] msg = Encoding.ASCII.GetBytes(data);
-            handler.Send(msg);
-            handler.Shutdown(SocketShutdown.Both);
-            handler.Close();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.ToString());
-        }
-
+        strm.Close();
+        client.Close();
+        tcpserver.Stop();
         return true;
     }
 
