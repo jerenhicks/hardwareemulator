@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "2YHa0UZacgzakjdLjY5dc3FShOof0rxhc8qdp5zFw+IU3lnnVsRGog7j5JVfvpIJwNH7TMAaFW1FI71yJ+SCtw==",
+  "dgSpecHash": "yKXaUQ3vauoZnfLMYq40vtlldG9pcTa5dJAms9yAloQwha9nc30BSjROs2ExzeewoFFFcgsxPNIADyoycnBMdg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Jeren Hicks\\hardwareemulator\\hardwareemulator.csproj",
-  "expectedPackageFiles": [],
+  "projectFilePath": "C:\\Users\\Jeren Hicks\\Documents\\hardwareemulator\\hardwareemulator.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Jeren Hicks\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512"
+  ],
   "logs": []
 }

@@ -1,17 +1,17 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 
-namespace hardwareemulator
+
+class Program
 {
-    class Program
+    readonly static string serverFileLocation = @".\serverlist.json";
+
+    public static int Main(String[] args)
     {
-        public static int Main(String[] args)
-        {
-
-            return 0;
-        }
-
+        ServerCreation serverCreation = new ServerCreation();
+        serverCreation.StartUp();
+        return 0;
     }
 }

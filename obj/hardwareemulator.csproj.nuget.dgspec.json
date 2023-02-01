@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Jeren Hicks\\hardwareemulator\\hardwareemulator.csproj": {}
+    "C:\\Users\\Jeren Hicks\\Documents\\hardwareemulator\\hardwareemulator.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Jeren Hicks\\hardwareemulator\\hardwareemulator.csproj": {
+    "C:\\Users\\Jeren Hicks\\Documents\\hardwareemulator\\hardwareemulator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Jeren Hicks\\hardwareemulator\\hardwareemulator.csproj",
+        "projectUniqueName": "C:\\Users\\Jeren Hicks\\Documents\\hardwareemulator\\hardwareemulator.csproj",
         "projectName": "hardwareemulator",
-        "projectPath": "C:\\Users\\Jeren Hicks\\hardwareemulator\\hardwareemulator.csproj",
+        "projectPath": "C:\\Users\\Jeren Hicks\\Documents\\hardwareemulator\\hardwareemulator.csproj",
         "packagesPath": "C:\\Users\\Jeren Hicks\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Jeren Hicks\\hardwareemulator\\obj\\",
+        "outputPath": "C:\\Users\\Jeren Hicks\\Documents\\hardwareemulator\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Jeren Hicks\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -37,6 +37,12 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
+          "dependencies": {
+            "Newtonsoft.json": {
+              "target": "Package",
+              "version": "[13.0.2, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
