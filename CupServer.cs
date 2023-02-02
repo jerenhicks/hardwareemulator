@@ -38,7 +38,7 @@ class CupServer
         catch (Exception e)
         {
             //FIXME: find the correct exception here, stupid vscode.
-            Console.WriteLine("Error while establishing connection");
+            ProcessMessage("Error while establishing connection with client");
             client.Close();
         }
     }
@@ -50,15 +50,8 @@ class CupServer
         {
             strm = client.GetStream();
 
-            while (true)
-            {
-                var reader = new BinaryReader(strm);
-                string p = reader.ReadString(); // you have to cast the deserialized object 
-
-                Message message = JsonConvert.DeserializeObject<Message>(p);
-
-                ProcessMessage(String.Format("Message received: {0} ", p));
-            }
+            ProcessInboundMessages(strm);
+            ProcessOutboundMessages(strm);
 
         }
         catch (Exception e)
@@ -69,6 +62,26 @@ class CupServer
             ProcessMessage("Client Disconnect, Waiting For New Client");
             EstablishConnection();
         }
+    }
+
+    private void ProcessInboundMessages(NetworkStream strm)
+    {
+        while (true)
+        {
+            var reader = new BinaryReader(strm);
+            var writer = new BinaryWriter(strm);
+            string p = reader.ReadString(); // you have to cast the deserialized object 
+
+            Message message = JsonConvert.DeserializeObject<Message>(p);
+
+            ProcessMessage(String.Format("Message received: {0} ", p));
+            writer.Write("ACK");
+        }
+    }
+
+    private void ProcessOutboundMessages(NetworkStream strm)
+    {
+
     }
 
     private void ProcessMessage(string message)
