@@ -1,14 +1,4 @@
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Text.Json;
 using Newtonsoft.Json;
-using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-
 
 class ServerCreation
 {
@@ -20,14 +10,19 @@ class ServerCreation
 
         var tasks = new List<Task>();
 
+        List<CupServer> cupServers = new List<CupServer>();
         foreach (Server server in serverList.servers)
         {
+            CupServer cupServer = new CupServer(server);
+            cupServers.Add(cupServer);
+
             var task = Task.Run(() =>
-            {
-                StartServer(server);
-            });
+                {
+                    cupServer.StartServer();
+                });
             tasks.Add(task);
         }
+
         Task.WaitAll(tasks.ToArray());
     }
 
@@ -47,36 +42,4 @@ class ServerCreation
         return serverList;
     }
 
-
-    private bool StartServer(Server server)
-    {
-        TcpListener tcpserver = new TcpListener(server.port);
-        tcpserver.Start();
-        Console.WriteLine("Starting server ({0}), waiting for a connection...", server.id);
-        TcpClient client = tcpserver.AcceptTcpClient();
-        Console.WriteLine("Connection found");
-        NetworkStream strm = client.GetStream();
-
-        //TODO: we need to loop here for messages. 
-        Console.WriteLine("message found");
-        IFormatter formatter = new BinaryFormatter();
-
-        //Person p = (Person)formatter.Deserialize(strm); // you have to cast the deserialized object 
-
-        //Console.WriteLine("Hi, I'm " + p.FirstName + " " + p.LastName + " and I'm " + p.age + " years old!");
-        Console.WriteLine("Message received");
-
-
-
-        strm.Close();
-        client.Close();
-        tcpserver.Stop();
-        return true;
-    }
-
-
-
-
-
 }
-

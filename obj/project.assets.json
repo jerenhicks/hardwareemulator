@@ -55,19 +55,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\arcti\\.nuget\\packages\\": {}
+    "C:\\Users\\Jeren Hicks\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\arcti\\Documents\\hardwareemulator\\hardwareemulator.csproj",
+      "projectUniqueName": "C:\\Users\\Jeren Hicks\\Documents\\hardwareemulator\\hardwareemulator.csproj",
       "projectName": "hardwareemulator",
-      "projectPath": "C:\\Users\\arcti\\Documents\\hardwareemulator\\hardwareemulator.csproj",
-      "packagesPath": "C:\\Users\\arcti\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\arcti\\Documents\\hardwareemulator\\obj\\",
+      "projectPath": "C:\\Users\\Jeren Hicks\\Documents\\hardwareemulator\\hardwareemulator.csproj",
+      "packagesPath": "C:\\Users\\Jeren Hicks\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Jeren Hicks\\Documents\\hardwareemulator\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\arcti\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\Jeren Hicks\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net7.0"
