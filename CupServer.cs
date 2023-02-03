@@ -1,22 +1,28 @@
 using System.Net.Sockets;
 using Newtonsoft.Json;
+using System.Net;
+
 
 class CupServer
 {
 
-    private Server server;
+
+    private ServerStatus status;
     private TcpListener tcpserver;
+    private Queue<Message> outboundMessages;
 
     public CupServer(Server server)
     {
-        this.server = server;
-        //FIXME: obsolete here, do something about that. 
-        tcpserver = new TcpListener(server.port);
+        this.status = new ServerStatus(server.id);
+        IPAddress localAddr = IPAddress.Parse("127.0.0.1");
+        tcpserver = new TcpListener(localAddr, server.port);
+        outboundMessages = new Queue<Message>();
     }
 
     public void StartServer()
     {
         tcpserver.Start();
+        this.status.SetStatus(ServerStatusEnum.ONLINE);
         ProcessMessage("Starting server, waiting for a connection...");
         EstablishConnection();
     }
@@ -24,6 +30,7 @@ class CupServer
     public void StopServer()
     {
         tcpserver.Stop();
+        this.status.SetStatus(ServerStatusEnum.OFFLINE);
     }
 
     private void EstablishConnection()
@@ -50,9 +57,19 @@ class CupServer
         {
             strm = client.GetStream();
 
-            ProcessInboundMessages(strm);
-            ProcessOutboundMessages(strm);
+            var tasks = new List<Task>();
+            var inboundTask = Task.Run(() =>
+            {
+                ProcessInboundMessages(strm);
+            });
+            tasks.Add(inboundTask);
 
+            var outboundTask = Task.Run(() =>
+            {
+                ProcessOutboundMessages(strm);
+            });
+            tasks.Add(outboundTask);
+            Task.WaitAll(tasks.ToArray());
         }
         catch (Exception e)
         {
@@ -66,28 +83,42 @@ class CupServer
 
     private void ProcessInboundMessages(NetworkStream strm)
     {
+        var reader = new BinaryReader(strm);
+
         while (true)
         {
-            var reader = new BinaryReader(strm);
-            var writer = new BinaryWriter(strm);
             string p = reader.ReadString(); // you have to cast the deserialized object 
 
             Message message = JsonConvert.DeserializeObject<Message>(p);
 
             ProcessMessage(String.Format("Message received: {0} ", p));
-            writer.Write("ACK");
+
+            outboundMessages.Enqueue(Message.CreateMessage(MessageType.ACK));
+
         }
+
+
     }
 
     private void ProcessOutboundMessages(NetworkStream strm)
     {
+        var writer = new BinaryWriter(strm);
+
+        //FIXME: this still keeps going, even if the inbound fails. Need a way to close these down together. 
+        while (true)
+        {
+            while (outboundMessages.Count > 0)
+                writer.Write(JsonConvert.SerializeObject(outboundMessages.Dequeue()));
+
+            Thread.Sleep(1000);
+        }
 
     }
 
     private void ProcessMessage(string message)
     {
         //FIXME: get a logger
-        Console.WriteLine("(Server ID {0}): {1}", server.id, message);
+        Console.WriteLine("(Server ID {0}): {1}", status.GetID(), message);
     }
 
 }
